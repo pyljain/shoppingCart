@@ -1,0 +1,85 @@
+<html>
+<head>
+  <script src="socket.io.js"></script>
+  <link rel="stylesheet" href="/assets/styles/salesforce-lightning-design-system.min.css" />
+</head>
+<body>
+  <div class="slds-page-header">
+    <div class="slds-media">
+      <div class="slds-media__figure">
+        <span class="slds-icon_container slds-icon-standard-opportunity" title="Description of icon when needed">
+          <svg class="slds-icon" aria-hidden="true">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#opportunity"></use>
+          </svg>
+        </span>
+      </div>
+      <div class="slds-media__body">
+        <h1 class="slds-page-header__title slds-truncate slds-align-middle">Play Now!</h1>
+        <p class="slds-text-body_small slds-line-height_reset">Enter Quiz # • You Name • Roll!</p>
+      </div>
+    </div>
+  </div>
+
+    <div class="demo-only" style="width: 440px;">
+      <div class="slds-form slds-form_compound">
+        <fieldset class="slds-form-element">
+          <legend class="slds-form-element__label slds-text-title_caps">Enter Details Below</legend>
+          <div class="slds-form-element__group">
+            <div class="slds-form-element__row">
+              <div class="slds-form-element slds-size_1-of-2">
+                <label class="slds-form-element__label" for="input-01">Quiz Code</label>
+                <input type="text" id="quizcode" class="slds-input">
+              </div>
+              <div class="slds-form-element slds-size_1-of-2">
+                <label class="slds-form-element__label" for="input-02">Your Name</label>
+                <input type="text" id="participantname" class="slds-input">
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        <button class = "slds-button slds-button--brand" id="submit" input type="submit" onclick="participate(event)">
+          Play Now
+        </button>
+      </div>
+    </div>
+
+
+  <div id="details">
+  </div>
+  <div id="waitingForStart">
+  </div>
+  <div id="question">
+    <ul id="questions">
+    </ul>
+  </div>
+  <div id="questionSummary">
+  </div>
+
+  <input type="text" onkeyup="sendmessage(event)" />
+  <ul id="messages">
+  </ul>
+
+  <script>
+    var socket = io()
+    function participate(event) {
+        var message = {
+          user: document.getElementById("participantname").value,
+          quizname: document.getElementById("quizcode").value
+        }
+        socket.emit('playQuiz', message)
+        console.log('Sending message from the client', message)
+    }
+
+    socket.on('question', showQuestion)
+
+    function showQuestion(qstn) {
+      console.log('In the showQuestion method with value', qstn)
+      var li = document.createElement('li')
+      li.innerText = qstn.question
+      document.getElementById("questions").appendChild(li)
+
+    }
+
+  </script>
+</body>
+</html>

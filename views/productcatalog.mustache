@@ -1,0 +1,121 @@
+<html>
+<head>
+  <h1></h1>
+  <link rel="stylesheet" href="/assets/styles/salesforce-lightning-design-system.min.css" />
+  <link rel="stylesheet" href="/css/main.css" />
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <div class="slds-trial-header slds-grid">
+    <div class="slds-grid">
+      <button class="slds-button slds-m-right_small" onclick="showCart(event)">Your cart currently has </button>
+
+      <div class="slds-grid slds-dropdown-trigger slds-dropdown-trigger_click">
+      <button class="slds-button" aria-haspopup="true" id="viewcart" onclick="showCart(event)">
+        <svg class="slds-button__icon slds-button__icon_left" aria-hidden="true">
+          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#right" />
+        </svg>Your Cart</button>
+
+      <div class="slds-dropdown slds-dropdown_inverse slds-dropdown_left" id="itemtable" style="display:none">
+        <ul class="slds-dropdown__list" role="menu" id="cartItems">
+          {{#cart}}
+          <li class="slds-dropdown__item slds-is-selected" role="presentation">
+              {{Name}}
+          </li>
+          {{/cart}}
+        </ul>
+      </div>
+    </div>
+    </div>
+
+    <div class="slds-grid slds-grid_vertical-align-center slds-col_bump-left">
+      <span class="slds-box slds-box_xx-small slds-theme_default" id="itemsincart"></span>
+      <span class="slds-m-horizontal_x-small"> </span><a href="javascript:void(0);" class="slds-button slds-button_success" id="buy01" style="display:block" onclick="makePayment(event)">Buy Now</a>
+    </div>
+    <div id="paymentpopover01" style="display:none">
+      <section class="slds-popover slds-popover_walkthrough slds-nubbin_left" role="dialog" aria-labelledby="dialog-heading-id-01" aria-describedby="dialog-body-id-5">
+        <button class="slds-button slds-button_icon slds-button_icon-small slds-float_right slds-popover__close slds-button_icon-inverse" title="Close dialog">
+          <svg class="slds-button__icon" aria-hidden="true">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close" />
+          </svg>
+          <span class="slds-assistive-text">Close dialog</span>
+        </button>
+        <header class="slds-popover__header slds-p-vertical_medium">
+          <h2 id="dialog-heading-id-01" class="slds-text-heading_medium">Items Summary</h2>
+        </header>
+        <div class="slds-popover__body paymentSummaryDiv01" id="dialog-body-id-5">
+          <p id="paymentSummary01">TEST</p>
+        </div>
+        <form action="/charge" method="post" id="payment-form">
+          <div class="form-row">
+            <label for="card-element">
+              Credit or debit card
+            </label>
+            <div id="card-element">
+              <!-- a Stripe Element will be inserted here. -->
+            </div>
+
+            <!-- Used to display form errors -->
+            <div id="card-errors" role="alert"></div>
+          </div>
+
+          <!-- <button class="slds-button slds-button_success slds-col_bump-left">Submit Payment</button> -->
+        <!--</form>-->
+        <footer class="slds-popover__footer">
+          <div class="slds-grid slds-grid_vertical-align-center">
+            <span class="slds-text-title"></span>
+            <button class="slds-button slds-button_brand slds-col_bump-left">Cancel</button>
+            <button class="slds-button slds-button_success slds-col_bump-left" > Pay </button>
+          </div>
+        </footer>
+      </form>
+      </section>
+    </div>
+  </div>
+
+  <div class="slds-grid slds-wrap styling">
+    {{#catalog}}
+    <div class="demo-only slds-col slds-p-horizontal_small slds-size_1-of-2 slds-medium-size_4-of-6 slds-large-size_4-of-12">
+      <!-- <form method="POST" action="/addtocart" id="selected-product"> -->
+      <div class="slds-media items">
+        <div class="slds-media__figure">
+          <span class="slds-avatar slds-avatar_large imagestyle">
+            <img alt="Person name" src={{URL}} title="User avatar" />
+          </span>
+        </div>
+        <div class="slds-media__body producttext">
+          <b><p id="name">{{Name}}</p></b>
+          <p id="category">{{Category}}</p>
+          <p id="code">{{Product Code}}</p>
+          <p id="price">{{Price}}</p>
+        </div>
+      </div>
+      <button class="slds-button slds-button--brand" id="btn-buy" input type = "submit" onclick="addtocart(event)" data-counter={{Product Code}} data-name="{{Name}}">
+        Add To Cart
+      </button>
+      <!-- </form> -->
+    </div>
+    {{/catalog}}
+  </div>
+  <div class="demo-only" id="toast01" style="height: 4rem;display:none">
+    <div class="slds-notify_container slds-is-relative">
+      <div class="slds-notify slds-notify_toast slds-theme_success" role="alert">
+        <span class="slds-assistive-text">success</span>
+        <span class="slds-icon_container slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top" title="Description of icon when needed">
+
+        </span>
+        <div class="slds-notify__content">
+          <h2 class="slds-text-heading_small " id="successmsg01"> TEST </h2>
+        </div>
+        <button class="slds-button slds-button_icon slds-notify__close slds-button_icon-inverse" title="Close" onclick="closetoast(event)">
+          <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close" />
+          </svg>
+          <span class="slds-assistive-text">Close</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <script src="/scripts/main.js"></script>
+</body>
+</html>
